@@ -7,7 +7,8 @@ const _ = require("lodash")
 async function getData() {
   const cacheFile = path.join(__dirname, "seed.json");
   try {
-    await fs.promises.readFile(cacheFile, "utf8")
+    const res = await fs.promises.readFile(cacheFile, "utf8");
+    return JSON.parse(res);
   }catch(e) {
     if(e.code !== "ENOENT") {
       throw(e);
@@ -40,6 +41,54 @@ async function getData() {
   await fs.promises.writeFile(cacheFile, JSON.stringify(data));
   return data;
 }
+/**
+ *
+ * @param {@import("@elastic/elasticsearch").Client} client
+ * @param {string} index
+ */
+async function createIndex(client, index = "search-metrics") {
+  try {
+    await client.indices.get({
+      index,
+    });
+    return false
+  } catch(e) {}
+  // only make it here if the index doesn't already exist...
+
+  await client.indices.create({
+    index
+  });
+
+  await client.indices.putMapping({
+    index,
+    dynamic: "false",
+    properties: {
+      name: {
+        type: "text",
+        fields: {
+          raw: {
+            type:  "keyword",
+          },
+        },
+      },
+      version: { type: "keyword" },
+      cloud: { type: "keyword" },
+      environment: { type: "keyword" },
+      event: { type: "keyword" },
+      value: {
+        type: "integer",
+        fields: {
+          raw: {
+            type:  "keyword",
+          },
+        },
+      },
+      time: { type: "date" }
+    },
+  });
+
+  return true;
+}
 
 async function seed(client) {
 
@@ -56,4 +105,5 @@ async function seed(client) {
 
 module.exports = {
   seed,
+  createIndex,
 }

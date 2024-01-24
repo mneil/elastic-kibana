@@ -6,7 +6,6 @@ run `docker-compose up` to run the application.
 
 open [http://localhost:5601/](http://localhost:5601/)
 
-
 ### Configure Kibana
 
 Once you open the browser you need to authenticate kibana with the elasticsearch database. Run these commands and copy the enrollment token
@@ -27,10 +26,32 @@ You can now login to kibana with `admin` user and `adminadmin` password.
 
 ### Configure Environment
 
+Install nodejs dependencies
+
+```sh
+npm i
+```
+
 Go to [http://localhost:5601/app/management/security/api_keys](http://localhost:5601/app/management/security/api_keys) and create a new API key. You can give it any name. Do not change any settings, click create.
 
 Create a new `.env` file in the root of this project and paste the api key there.
 
 ```sh
 API_KEY=<token>
+```
+
+Execute the setup scripts to create an index and prefill it with data
+
+```sh
+node ./index.js
+# {
+#   total: 34901,
+#   failed: 0,
+#   retry: 0,
+#   successful: 34901,
+#   noop: 0,
+#   time: 1294,
+#   bytes: 5408138,
+#   aborted: false
+# }
 ```

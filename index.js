@@ -1,7 +1,7 @@
 require("dotenv").config();
 const fs = require("fs");
 const { Client } = require("@elastic/elasticsearch");
-const { seed } = require("./src");
+const { seed, createIndex } = require("./src");
 
 async function main() {
   const client = new Client({
@@ -14,50 +14,12 @@ async function main() {
       rejectUnauthorized: false,
     },
   });
-  // await client.indices.create({
-  //   index: "search-metrics",
-  //   mappings: {
-  //     dynamic: "true",
-  //     dynamic_templates: [
-  //       {
-  //         all_text_fields: {
-  //           match_mapping_type: "string",
-  //           mapping: {
-  //             analyzer: "iq_text_base",
-  //             fields: {
-  //               delimiter: {
-  //                 analyzer: "iq_text_delimiter",
-  //                 type: "text",
-  //                 index_options: "freqs",
-  //               },
-  //               joined: {
-  //                 search_analyzer: "q_text_bigram",
-  //                 analyzer: "i_text_bigram",
-  //                 type: "text",
-  //                 index_options: "freqs",
-  //               },
-  //               prefix: {
-  //                 search_analyzer: "q_prefix",
-  //                 analyzer: "i_prefix",
-  //                 type: "text",
-  //                 index_options: "docs",
-  //               },
-  //               enum: {
-  //                 ignore_above: 2048,
-  //                 type: "keyword",
-  //               },
-  //               stem: {
-  //                 analyzer: "iq_text_stem",
-  //                 type: "text",
-  //               },
-  //             },
-  //           },
-  //         },
-  //       },
-  //     ],
-  //   },
-  // });
 
+  const created = await createIndex(client, "search-metrics");
+  if(!created) {
+    console.log("Already bootstrapped. Nothing to do.");
+    return;
+  }
   console.log(await seed(client));
 
   // const searchResult = await client.search({
