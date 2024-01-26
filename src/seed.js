@@ -4,6 +4,14 @@ const os = require("os");
 const {faker} = require("@faker-js/faker");
 const _ = require("lodash")
 
+function getVersion() {
+  return `v${(String(Math.random())).replace(".", "")}`
+}
+
+function getName() {
+  return _.kebabCase(`${faker.company.buzzAdjective()}-${faker.company.buzzNoun()}-${faker.company.buzzNoun()}`);
+}
+
 async function getData() {
   const cacheFile = path.join(__dirname, "seed.json");
   try {
@@ -20,13 +28,15 @@ async function getData() {
   const numApps = 5;
   const data = [];
   for(let i = 0; i < numApps; i++) {
-    const name = _.kebabCase(faker.company.buzzNoun());
+    const name = getName();
     const numRecords = faker.helpers.rangeToNumber({ min: 600, max: 10000 });
+    let version = getVersion();
     for(let i = 0; i < numRecords; i++) {
       const time = faker.date.recent({ days: 14 });
       const event = _.sample(events);
       const environment = _.sample(environments);
       const value = event === "execution-time" ? faker.helpers.rangeToNumber({ min: 32, max: 3000 }) : 1;
+      version = event === "deploy" ? getVersion() : version;
       data.push({
         name,
         cloud: "aws",
@@ -34,6 +44,7 @@ async function getData() {
         event,
         value,
         time,
+        version,
       });
     }
   }

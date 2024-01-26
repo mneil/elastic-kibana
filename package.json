@@ -4,6 +4,7 @@
   "description": "## Setup",
   "main": "index.js",
   "scripts": {
+    "start": "NODE_EXTRA_CA_CERTS=/home/mneil/projects/elastic-ex/http_ca.crt node ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
