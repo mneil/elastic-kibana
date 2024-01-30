@@ -101,14 +101,14 @@ async function createIndex(client, index = "search-metrics") {
   return true;
 }
 
-async function seed(client) {
+async function seed(client, index) {
 
   const dataset = await getData();
 
   const result = await client.helpers.bulk({
     datasource: dataset,
     pipeline: "ent-search-generic-ingestion",
-    onDocument: (doc) => ({ index: { _index: 'search-metrics' }}),
+    onDocument: (doc) => ({ index: { _index: index }}),
   });
   return result
 
