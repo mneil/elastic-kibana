@@ -12,14 +12,16 @@ function getName() {
   return _.kebabCase(`${faker.company.buzzAdjective()}-${faker.company.buzzNoun()}-${faker.company.buzzNoun()}`);
 }
 
-async function getData() {
+async function getData(withCache = true) {
   const cacheFile = path.join(__dirname, "seed.json");
-  try {
-    const res = await fs.promises.readFile(cacheFile, "utf8");
-    return JSON.parse(res);
-  }catch(e) {
-    if(e.code !== "ENOENT") {
-      throw(e);
+  if(withCache) {
+    try {
+      const res = await fs.promises.readFile(cacheFile, "utf8");
+      return JSON.parse(res);
+    }catch(e) {
+      if(e.code !== "ENOENT") {
+        throw(e);
+      }
     }
   }
 
@@ -101,9 +103,9 @@ async function createIndex(client, index = "search-metrics") {
   return true;
 }
 
-async function seed(client, index) {
+async function seed(client, index, withCache) {
 
-  const dataset = await getData();
+  const dataset = await getData(withCache);
 
   const result = await client.helpers.bulk({
     datasource: dataset,

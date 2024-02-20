@@ -37,9 +37,13 @@ yargs(hideBin(process.argv))
     'seed an index',
     {
       ...optionIndex,
+      cache: {
+        boolean: true,
+        default: true
+      }
     },
     async (argv) => {
-      await seed(argv.client, argv.index);
+      await seed(argv.client, argv.index, argv.cache);
     })
   .command(
     ['index'],
