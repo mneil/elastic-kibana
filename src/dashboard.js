@@ -28,7 +28,7 @@ async function backup(url, apiKey) {
       // }
     ),
   });
-  await fs.promises.writeFile(path.join(__dirname, "dashboard.json"), await res.text())
+  await fs.promises.writeFile(path.join(__dirname, "dashboard.ndjson"), await res.text())
 
   // curl -X POST api/saved_objects/_export -H 'kbn-xsrf: true' -H 'Content-Type: application/json' -d '
   // {
