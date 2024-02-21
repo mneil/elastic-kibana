@@ -55,3 +55,41 @@ node ./index.js
 #   aborted: false
 # }
 ```
+
+## APM
+
+TODO: Do we need to even configure APM first? IDK
+
+```sh
+curl -L -O https://artifacts.elastic.co/downloads/apm-server/apm-server-8.11.0-linux-x86_64.tar.gz\n
+tar xzvf apm-server-8.11.0-linux-x86_64.tar.gz\n
+cd apm-server-8.11.0-linux-x86_64
+# copy apm-server.yml to apm-server-8.11.0-linux-x86_64
+./apm-server -e
+```
+
+Below are the contents of apm-server.yml. You need to configure the full path to the CA cert on disk
+
+```yml
+# contents of apm-server.yml
+apm-server:
+  # Defines the host and port the server is listening on. Use "unix:/path/to.sock" to listen on a unix domain socket.
+  host: "127.0.0.1:8200"
+output.elasticsearch:
+  # Array of hosts to connect to.
+  # Scheme and port can be left out and will be set to the default (`http` and `9200`).
+  # In case you specify and additional path, the scheme is required: `http://localhost:9200/path`.
+  # IPv6 addresses should always be defined as: `https://[2001:db8::1]:9200`.
+  hosts: ["localhost:9200"]
+
+  # Protocol - either `http` (default) or `https`.
+  protocol: "https"
+
+  # Authentication credentials - either API key or username/password.
+  #api_key: "id:api_key"
+  username: "admin"
+  password: "adminadmin"
+
+  # List of root certificates for HTTPS server verifications.
+  ssl.certificate_authorities: ["${REPLACE WITH ABSOLUTE PATH TO THIS FILE}/http_ca.crt"]
+```

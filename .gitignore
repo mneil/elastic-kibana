@@ -2,3 +2,4 @@ node_modules
 .env
 http_ca.crt
 src/seed.json
+apm-server-*

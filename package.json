@@ -4,8 +4,9 @@
   "description": "## Setup",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_EXTRA_CA_CERTS=/home/mneil/projects/elastic-ex/http_ca.crt node ./index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_EXTRA_CA_CERTS=$PWD/http_ca.crt node ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "otel": "NODE_EXTRA_CA_CERTS=$PWD/http_ca.crt node ./example-app/how.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +17,11 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@opentelemetry/api": "^1.7.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.41.1",
+    "@opentelemetry/exporter-trace-otlp-proto": "^0.48.0",
+    "@opentelemetry/sdk-node": "^0.48.0",
+    "elastic-apm-node": "^4.4.1",
     "yargs": "^17.7.2"
   }
 }
