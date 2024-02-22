@@ -11,6 +11,8 @@ services:
     environment:
       - "discovery.type=single-node"
       - "ES_JAVA_OPTS=-Xms4g -Xmx4g"
+  # volumes:
+  #   - elastic:/usr/share/elasticsearch/config/certs
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.11.4
@@ -23,6 +25,21 @@ services:
       - elastic
     depends_on:
       - elasticsearch
+
+  apm:
+    image: docker.elastic.co/apm/apm-server:8.11.4
+    container_name: elastic-apm
+    ports:
+      - "8200:8200"
+    networks:
+      - elastic
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ${PWD}/apm-server.yml:/usr/share/apm-server/apm-server.yml:ro
+
+# volumes:
+#   elastic:
 
 networks:
   elastic:
