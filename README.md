@@ -64,4 +64,4 @@ Run `npm run otel` to start a node app that will send APM metics to elastic.
 
 Run `wget -qO- localhost:3000/test` to send metrics. Change the url path to create different transactions in the control service.
 
-
+You can also auto-generate random metrics with `npm run siege`. [Siege](https://github.com/JoeDog/siege) must be installed in order to use this command.

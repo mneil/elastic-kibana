@@ -31,6 +31,20 @@ http.createServer(function (req, res) {
     params: {test: 'ok'},
   }; // patterns.match(req.method + ' ' + req.url);
 
+  // The patterns module exposes the pattern used to match the
+  // request on the `pattern` property, e.g. `GET /posts/{id}`
+  apm.setTransactionName(match.pattern)
+
+  // try {
+    if(Math.random()*100 > 99) {
+      throw new Error(`random error for ${res.url}`);
+    }
+  // } catch(e) {
+  //   res.writeHead(500)
+  //   res.end()
+  //   return
+  // }
+
   // If no match is found, respond with a 404. Elastic APM will in
   // this case use the default transaction name "unknown route"
   if (!match) {
@@ -39,9 +53,6 @@ http.createServer(function (req, res) {
     return
   }
 
-  // The patterns module exposes the pattern used to match the
-  // request on the `pattern` property, e.g. `GET /posts/{id}`
-  apm.setTransactionName(match.pattern)
 
   // Populate the params and call the matching route handler
   const fn = match.value

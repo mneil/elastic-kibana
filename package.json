@@ -6,7 +6,9 @@
   "scripts": {
     "start": "NODE_EXTRA_CA_CERTS=$PWD/http_ca.crt node ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "otel": "NODE_EXTRA_CA_CERTS=$PWD/http_ca.crt node ./example-app/how.js"
+    "otel": "NODE_EXTRA_CA_CERTS=$PWD/http_ca.crt pm2-runtime start ./example-app/how.js",
+    "siege": "siege -t60M -c3 -d1 -i -f urls.txt",
+    "dump": "NODE_EXTRA_CA_CERTS=$PWD/http_ca.crt npx elasticdump --input https://admin:adminadmin@localhost:9200 --output data.json"
   },
   "author": "",
   "license": "ISC",
@@ -14,8 +16,8 @@
     "@elastic/elasticsearch": "^8.11.0",
     "@faker-js/faker": "^8.3.1",
     "dotenv": "^16.4.0",
-    "elasticdump": "^6.110.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@opentelemetry/api": "^1.7.0",
@@ -23,6 +25,7 @@
     "@opentelemetry/exporter-trace-otlp-proto": "^0.48.0",
     "@opentelemetry/sdk-node": "^0.48.0",
     "elastic-apm-node": "^4.4.1",
-    "yargs": "^17.7.2"
+    "elasticdump": "^6.110.0",
+    "pm2": "^5.3.1"
   }
 }
